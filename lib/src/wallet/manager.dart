@@ -84,8 +84,8 @@ class KeyStoreManager implements WalletManager {
 
   Future<KeyStore> readKeyStore(String password, File keyStoreFile) async {
     if (!keyStoreFile.existsSync()) {
-      throw InvalidKeyStorePath(
-          'Given keyStore does not exist ($keyStoreFile)');
+      throw InvalidWalletPath(
+          'Given wallet path does not exist ($keyStoreFile)');
     }
 
     var content = await keyStoreFile.readAsString();
@@ -100,7 +100,7 @@ class KeyStoreManager implements WalletManager {
         if (file is File) {
           return KeyStoreDefinition(file: file);
         } else {
-          throw InvalidKeyStorePath('Given keyStore is not a file ($name)');
+          throw InvalidWalletPath('Given wallet path is not a file ($name)');
         }
       }
     }
