@@ -9,7 +9,7 @@ import 'package:znn_sdk_dart/src/global.dart';
 import 'package:znn_sdk_dart/src/wallet/exceptions.dart';
 import 'package:znn_sdk_dart/src/wallet/keystore.dart';
 import 'package:znn_sdk_dart/src/wallet/interfaces.dart';
-import 'package:znn_sdk_dart/src/wallet/securefile.dart';
+import 'package:znn_sdk_dart/src/wallet/encryptedfile.dart';
 
 class KeyStoreOptions implements WalletOptions {
   final String decryptionPassword;
@@ -27,7 +27,7 @@ class SaveKeyStoreArguments {
 
 void saveKeyStoreFunction(SaveKeyStoreArguments args) async {
   var encrypted =
-      await SecureFile.encrypt(HEX.decode(args.store.entropy), args.password);
+      await EncryptedFile.encrypt(HEX.decode(args.store.entropy), args.password);
   args.port.send(json.encode(encrypted));
 }
 
@@ -78,7 +78,7 @@ class KeyStoreManager implements WalletManager {
 
     var content = await keyStoreFile.readAsString();
     var seed =
-        await SecureFile.fromJson(json.decode(content)).decrypt(password);
+        await EncryptedFile.fromJson(json.decode(content)).decrypt(password);
     return KeyStore.fromEntropy(HEX.encode(seed));
   }
 

@@ -7,16 +7,16 @@ import 'package:cryptography/cryptography.dart' as cryptography;
 import 'package:hex/hex.dart';
 import 'package:znn_sdk_dart/znn_sdk_dart.dart';
 
-class SecureFile {
+class EncryptedFile {
   _Crypto? crypto;
   int? timestamp;
   int? version;
 
-  SecureFile({this.crypto, this.timestamp, this.version});
+  EncryptedFile({this.crypto, this.timestamp, this.version});
 
-  static Future<SecureFile> encrypt(List<int> data, String password) async {
+  static Future<EncryptedFile> encrypt(List<int> data, String password) async {
     var timestamp = ((DateTime.now()).millisecondsSinceEpoch / 1000).round();
-    var stored = SecureFile(
+    var stored = EncryptedFile(
         timestamp: timestamp,
         version: 1,
         crypto: _Crypto(
@@ -58,7 +58,7 @@ class SecureFile {
     }
   }
 
-  SecureFile.fromJson(Map<String, dynamic> json) {
+  EncryptedFile.fromJson(Map<String, dynamic> json) {
     crypto = json['crypto'] != null ? _Crypto.fromJson(json['crypto']) : null;
     timestamp = json['timestamp'];
     version = json['version'];
@@ -79,7 +79,7 @@ class SecureFile {
     return toJson().toString();
   }
 
-  Future<SecureFile> _encryptData(List<int> data, String password) async {
+  Future<EncryptedFile> _encryptData(List<int> data, String password) async {
     var salt_1 = await cryptography.SecretKeyData.random(length: 16).extract();
     var salt = Uint8List.fromList(salt_1.bytes);
     var nonce_1 = await cryptography.SecretKeyData.random(length: 12).extract();
